@@ -1,0 +1,2 @@
+# Carousel
+Pure JS carousel
