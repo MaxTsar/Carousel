@@ -44,17 +44,19 @@ table {
 
 
 .container {
+    position: relative;
+
     margin: 50px auto;
     max-width: 1200px;
 }
 
 .carousel {
-    position: relative;
-    /* overflow: hidden; */
+    overflow: hidden;
 }
 
 .carousel-list {
     display: flex;
+    transition: all 1s ease;
 }
 
 .arrow {
@@ -64,9 +66,11 @@ table {
     height: 20px;
     background: red;
     cursor: pointer;
+    z-index: 100;
 }
 
 .arrow-left {
+    left: 0;
     margin-top: -10px;
 }
 
