@@ -1,6 +1,8 @@
 (function() {
     var imgItemList = document.querySelectorAll('.carouesel-img-item')
     var imgItem = imgItemList[0]
+    var lastItem = imgItemList[imgItemList.length - 1]
+    var cloneLastItem = lastItem.cloneNode(true)
     // image width and step for scroll
     var step = imgItem ? imgItem.offsetWidth : null
     // endpoint
@@ -12,6 +14,11 @@
     var imgCount = imgItemList.length
 
     var carousel = document.querySelector('.carousel-list')
+    setTimeout(() => {
+        carousel.insertBefore(cloneLastItem, imgItem)
+
+    }, 2000)
+    carousel.style.transform = 'translate3d(' + 0 + 'px, 0px, 0px)'
     var firstClone = imgItem
 
     // buttons
@@ -34,7 +41,7 @@
             var first = document.querySelector('.carousel-list img:first-child')
             carousel.insertBefore(last, first)
         }
-        
+
         current += step + padding
         console.log('current', currentSlide)
         carousel.style.transform = 'translate3d(' + (current) + 'px, 0px, 0px)'
