@@ -14,10 +14,10 @@
     var imgCount = imgItemList.length
 
     var carousel = document.querySelector('.carousel-list')
-    setTimeout(() => {
-        carousel.insertBefore(cloneLastItem, imgItem)
+    // setTimeout(() => {
+    //     carousel.insertBefore(cloneLastItem, imgItem)
 
-    }, 2000)
+    // }, 2000)
     carousel.style.transform = 'translate3d(' + 0 + 'px, 0px, 0px)'
     var firstClone = imgItem
 
@@ -27,20 +27,29 @@
 
     prev.addEventListener('click', () => {
         currentSlide += 1
+
+        console.log(currentSlide, imgCount, currentSlide === imgCount)
+        if (currentSlide >= imgCount - 3) {
+            currentSlide = imgCount - 3
+            return
+        }
         current -= step + padding
-        console.log('current', current, 'step', step)
         carousel.style.transform = 'translate3d(' + current + 'px, 0px, 0px)'
     })
 
     next.addEventListener('click', () => {
         currentSlide -= 1
-
-        if (currentSlide < 0) {
-            var last = document.querySelector('.carousel-list img:last-child')
-            console.log('last', last)
-            var first = document.querySelector('.carousel-list img:first-child')
-            carousel.insertBefore(last, first)
+        console.log(currentSlide, imgCount, currentSlide === imgCount)
+        if (currentSlide <= 0) {
+            return currentSlide = 0
         }
+
+        // if (currentSlide < 0) {
+        //     var last = document.querySelector('.carousel-list img:last-child')
+        //     console.log('last', last)
+        //     var first = document.querySelector('.carousel-list img:first-child')
+        //     carousel.insertBefore(last, first)
+        // }
 
         current += step + padding
         console.log('current', currentSlide)

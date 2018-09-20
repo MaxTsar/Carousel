@@ -81,7 +81,8 @@ table {
 
 .carousel img {
     margin-right: 20px;
-    width: 285px;
+    /* width: 285px; */
+    width: 100%;
     align-self: center;
 }
 
