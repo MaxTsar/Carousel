@@ -79,10 +79,16 @@ table {
     margin-top: -10px;
 }
 
+@media only screen and (max-width: 1200px) {
+    .container {
+        background: red;
+    }
+}
+
 .carousel img {
     margin-right: 20px;
     /* width: 285px; */
-    width: 100%;
+    /* width: 100%; */
     align-self: center;
 }
 
