@@ -91,8 +91,26 @@ table {
     /* width: 100%; */
     align-self: center;
 }
+body {
+    position: relative;
+}
 
+#test {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    background: #a5c9ff;
+    z-index: 11111;
+}
 
+.grabbable {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
 
 
 
