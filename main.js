@@ -78,7 +78,6 @@
 
     // --- right button (next)
     next.addEventListener('click', () => {
-
         if (first.classList.contains('active')) {
             return
         }
@@ -124,18 +123,26 @@
 
     carousel.classList.add('grabbable')
 
-    // swipe
+    var touchStartPoint = 0
+
+    // toche desktop
     carousel.onmousedown = (e) => {
-        console.log('start', e.pageX)
+        touchStartPoint = e.pageX
+        // console.log('mouse down', e.pageX)
         document.onmousemove = function(e) {
-            
-            console.log('move', e.pageX)
-            carousel.style.transform = 'translate3d(' + 200 + 'px, 0px, 0px)'
+            let deltaX = 0
+            if (touchStartPoint <= e.pageX) {
+                deltaX = e.pageX - touchStartPoint
+                carousel.style.transform = 'translate3d(' + (current + deltaX) + 'px, 0px, 0px)'
+            } else {
+                deltaX = touchStartPoint - e.pageX
+                carousel.style.transform = 'translate3d(' + (current - deltaX) + 'px, 0px, 0px)'
+            }
+
             carousel.onmouseup = (e) => {
-                console.log('up', e.pageX)
-                // --
                 currentSlide -= 1
 
+                // ---
                 var index = device.imgCount
                 imgItemList.forEach((item, i) => {
                     item.classList.remove('active')
@@ -145,27 +152,26 @@
                         index--
                     }
                 })
-                current += fullStep
+                // current += fullStep 
+                // rounding
 
                 carousel.style.transform = 'translate3d(' + (current) + 'px, 0px, 0px)'
-                // --
+                // ---
 
                 document.onmousemove = null
                 carousel.onmouseup = null
-
-
             }
         }
     }
 
-    var touchStartPoint = 0
 
-    console.log(window.ondragstart)
+    // mobile touche
     carousel.ontouchstart = (e) => {
         var touchLocation = e.targetTouches[0]
         touchStartPoint = touchLocation.clientX
         console.log('mobile start touche', touchLocation.clientX)
     }
+
     carousel.ontouchend = (e) => {
         var touchLocation = e.targetTouches[0]
         // touchStartPoint = touchLocation
@@ -175,28 +181,26 @@
         //     return
         // }
 
-        carousel.style.transform = 'translate3d(' + (current += fullStep) + 'px, 0px, 0px)'
+        // carousel.style.transform = 'translate3d(' + (current += fullStep) + 'px, 0px, 0px)'
 
     }
     carousel.ontouchmove = (e) => {
         var touchLocation = e.targetTouches[0]
         var deltaX = 0
             console.log('ontouchemove')
-        if (touchStartPoint < touchLocation.clientX) {
+        if (touchStartPoint <= touchLocation.clientX) {
             // console.log('меньше')
             deltaX = touchLocation.clientX - touchStartPoint
+            carousel.style.transform = 'translate(' + (current + deltaX) + 'px, 0px)'
+        } else {
+            deltaX = touchStartPoint - touchLocation.clientX
+            carousel.style.transform = 'translate(' + (current - deltaX) + 'px, 0px)'
         }
 
         // carousel.style.transform = 'translate3d(' + (current + deltaX) + 'px, 0px, 0px)'
-        
-        console.log('MOOVE',  touchStartPoint, touchLocation.clientX)
     }
     carousel.ondragstart = function() {
         return false
     }
-    // carousel.ontouchstart = function() {
-    //     return false;
-    // }
-
 
 })()

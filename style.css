@@ -45,7 +45,6 @@ table {
 
 .container {
     position: relative;
-
     margin: 50px auto;
     max-width: 1200px;
 }
@@ -56,7 +55,10 @@ table {
 
 .carousel-list {
     display: flex;
-    transition: all 1s ease;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-drag: none;
+    transition: all 0.25s ease 0s;
 }
 
 .arrow {
