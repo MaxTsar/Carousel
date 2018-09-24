@@ -52,6 +52,8 @@
     var first = document.querySelector('.carousel-list img:first-child')
     var last = document.querySelector('.carousel-list img:last-child')
 
+    init()
+
     // --- left button (prev)
     prev.addEventListener('click', () => {
 
@@ -108,6 +110,11 @@
     // ---
     
 
+    function init() {
+        carousel.classList.add('grabbable')
+        carousel.classList.add('transition')
+    }
+
     function initWithActiveClass(list) {
         list.forEach((item, i) => {
             item.classList.remove('active')
@@ -121,14 +128,14 @@
         fullStep = step + padding
     }
 
-    carousel.classList.add('grabbable')
-
+    // start point on touch
     var touchStartPoint = 0
 
     // toche desktop
     carousel.onmousedown = (e) => {
+        carousel.classList.remove('transition')
         touchStartPoint = e.pageX
-        // console.log('mouse down', e.pageX)
+        console.log('mouse down', e.pageX)
         document.onmousemove = function(e) {
             let deltaX = 0
             if (touchStartPoint <= e.pageX) {
@@ -167,38 +174,40 @@
 
     // mobile touche
     carousel.ontouchstart = (e) => {
+        carousel.classList.remove('transition')
         var touchLocation = e.targetTouches[0]
         touchStartPoint = touchLocation.clientX
-        console.log('mobile start touche', touchLocation.clientX)
     }
-
-    carousel.ontouchend = (e) => {
-        var touchLocation = e.targetTouches[0]
-        // touchStartPoint = touchLocation
-        console.log('mobile end touche', touchStartPoint)
-
-        // if (first.classList.contains('active')) {
-        //     return
-        // }
-
-        // carousel.style.transform = 'translate3d(' + (current += fullStep) + 'px, 0px, 0px)'
-
-    }
+   
     carousel.ontouchmove = (e) => {
         var touchLocation = e.targetTouches[0]
         var deltaX = 0
-            console.log('ontouchemove')
         if (touchStartPoint <= touchLocation.clientX) {
-            // console.log('меньше')
-            deltaX = touchLocation.clientX - touchStartPoint
+            if (first.classList.contains('active')) {
+                deltaX = (touchLocation.clientX - touchStartPoint) < 50 ? (touchLocation.clientX - touchStartPoint) : 50
+            } else {
+                console.log('else')
+                deltaX = touchLocation.clientX - touchStartPoint
+            }
             carousel.style.transform = 'translate(' + (current + deltaX) + 'px, 0px)'
         } else {
             deltaX = touchStartPoint - touchLocation.clientX
             carousel.style.transform = 'translate(' + (current - deltaX) + 'px, 0px)'
         }
-
-        // carousel.style.transform = 'translate3d(' + (current + deltaX) + 'px, 0px, 0px)'
     }
+
+    carousel.ontouchend = (e) => {
+        carousel.classList.add('transition')
+        if (first.classList.contains('active')) {
+            carousel.style.transform = 'translate3d(' + (0) + 'px, 0px, 0px)'
+            return
+        }
+        var touchLocation = e.targetTouches[0]
+        
+        carousel.style.transform = 'translate3d(' + (current += fullStep) + 'px, 0px, 0px)'
+
+    }
+
     carousel.ondragstart = function() {
         return false
     }

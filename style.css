@@ -55,9 +55,13 @@ table {
 
 .carousel-list {
     display: flex;
-    touch-action: pan-y;
+    /* touch-action: pan-y; */
+    /* touch-action: pan-x; */
     user-select: none;
     -webkit-user-drag: none;
+}
+
+.transition {
     transition: all 0.25s ease 0s;
 }
 
