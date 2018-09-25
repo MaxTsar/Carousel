@@ -44,6 +44,7 @@
 
     var currentWidth = 0
     var fullWidth = fullStep * imgCount
+    console.log(fullWidth - fullStep * device.imgCount)
 
     // controls
     var prev = document.querySelector('.arrow-left')
@@ -56,9 +57,7 @@
 
     // --- left button (prev)
     prev.addEventListener('click', () => {
-        console.log('prev')
         if (last.classList.contains('active')) {
-            console.log('LAST', last)
             return
         }
 
@@ -81,7 +80,6 @@
 
     // --- right button (next)
     next.addEventListener('click', () => {
-        console.log('next click')
         if (first.classList.contains('active')) {
             return
         }
@@ -135,44 +133,44 @@
     var direction = 'RIGHT'
 
     // toche desktop
-    carousel.onmousedown = (e) => {
-        carousel.classList.remove('transition')
-        touchStartPoint = e.pageX
+    // carousel.onmousedown = (e) => {
+    //     carousel.classList.remove('transition')
+    //     touchStartPoint = e.pageX
 
-        document.onmousemove = function(e) {
-            let deltaX = 0
-            if (touchStartPoint <= e.pageX) {
-                deltaX = e.pageX - touchStartPoint
-                carousel.style.transform = 'translate3d(' + (current + deltaX) + 'px, 0px, 0px)'
-            } else {
-                deltaX = touchStartPoint - e.pageX
-                carousel.style.transform = 'translate3d(' + (current - deltaX) + 'px, 0px, 0px)'
-            }
+    //     document.onmousemove = function(e) {
+    //         let deltaX = 0
+    //         if (touchStartPoint <= e.pageX) {
+    //             deltaX = e.pageX - touchStartPoint
+    //             carousel.style.transform = 'translate3d(' + (current + deltaX) + 'px, 0px, 0px)'
+    //         } else {
+    //             deltaX = touchStartPoint - e.pageX
+    //             carousel.style.transform = 'translate3d(' + (current - deltaX) + 'px, 0px, 0px)'
+    //         }
 
-            carousel.onmouseup = (e) => {
-                currentSlide -= 1
+    //         carousel.onmouseup = (e) => {
+    //             currentSlide -= 1
 
-                // ---
-                var index = device.imgCount
-                imgItemList.forEach((item, i) => {
-                    item.classList.remove('active')
+    //             // ---
+    //             var index = device.imgCount
+    //             imgItemList.forEach((item, i) => {
+    //                 item.classList.remove('active')
 
-                    if (i >= currentSlide && index) {
-                        item.classList.add('active')
-                        index--
-                    }
-                })
-                // current += fullStep 
-                // rounding
+    //                 if (i >= currentSlide && index) {
+    //                     item.classList.add('active')
+    //                     index--
+    //                 }
+    //             })
+    //             // current += fullStep
+    //             // rounding
 
-                carousel.style.transform = 'translate3d(' + (current) + 'px, 0px, 0px)'
-                // ---
+    //             carousel.style.transform = 'translate3d(' + (current) + 'px, 0px, 0px)'
+    //             // ---
 
-                document.onmousemove = null
-                carousel.onmouseup = null
-            }
-        }
-    }
+    //             document.onmousemove = null
+    //             carousel.onmouseup = null
+    //         }
+    //     }
+    // }
     // -----
 
 
@@ -193,7 +191,7 @@
             deltaX = touchLocation.clientX - touchStartPoint
             if (first.classList.contains('active')) {
                 deltaX = (touchLocation.clientX - touchStartPoint) < 50 ? (touchLocation.clientX - touchStartPoint) : 50
-            } 
+            }
             // else {
             //     deltaX = touchLocation.clientX - touchStartPoint
             // }
@@ -201,18 +199,26 @@
         } else {
             console.log('left')
             direction = 'LEFT'
-
             deltaX = touchStartPoint - touchLocation.clientX
+
+            if (last.classList.contains('active')) {
+                deltaX = (touchStartPoint - touchLocation.clientX) < 50 ? (touchStartPoint - touchLocation.clientX) : 50
+            }
+
             carousel.style.transform = 'translate(' + (current - deltaX) + 'px, 0px)'
         }
     }
 
     carousel.ontouchend = (e) => {
         carousel.classList.add('transition')
-        console.log('DIRECTION', direction)
 
         if (first.classList.contains('active') && direction === 'RIGHT') {
             carousel.style.transform = 'translate3d(' + (0) + 'px, 0px, 0px)'
+            return
+        }
+
+        if (last.classList.contains('active') && direction === 'LEFT') {
+            carousel.style.transform = 'translate3d(' + (- (fullWidth - fullStep * device.imgCount)) + 'px, 0px, 0px)'
             return
         }
 
@@ -235,7 +241,6 @@
 
             var index = device.imgCount
             imgItemList.forEach((item, i) => {
-                console.log('for', item)
                 item.classList.remove('active')
                 if (i >= currentSlide && index) {
                     item.classList.add('active')
