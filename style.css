@@ -55,14 +55,16 @@ table {
 
 .carousel-list {
     display: flex;
-    /* touch-action: pan-y; */
-    /* touch-action: pan-x; */
     user-select: none;
     -webkit-user-drag: none;
 }
 
 .transition {
     transition: all 0.25s ease 0s;
+}
+
+img {
+    width: 100%;
 }
 
 .arrow {
@@ -85,18 +87,11 @@ table {
     margin-top: -10px;
 }
 
-@media only screen and (max-width: 1200px) {
-    .container {
-        background: red;
-    }
-}
-
-.carousel img {
+.carousel a {
     margin-right: 20px;
-    /* width: 285px; */
-    /* width: 100%; */
     align-self: center;
 }
+
 body {
     position: relative;
 }

@@ -22,12 +22,12 @@
 
     // default indent between images
     var padding = 20
-    // set width for images
+    // set width for slider items
     imgItemList.forEach((item, i) => {
         if (i < device.imgCount) {
             item.classList.add('active')
-        }   
-        item.style.width = (carousel.offsetWidth - padding * (device.imgCount - 1)) / device.imgCount + 'px'
+        }
+        item.style.minWidth = (carousel.offsetWidth - padding * (device.imgCount - 1)) / device.imgCount + 'px'
     })
 
     var imgItem = imgItemList[0]
@@ -49,15 +49,16 @@
     var prev = document.querySelector('.arrow-left')
     var next = document.querySelector('.arrow-right')
 
-    var first = document.querySelector('.carousel-list img:first-child')
-    var last = document.querySelector('.carousel-list img:last-child')
+    var first = document.querySelector('.carousel-list a:first-child')
+    var last = document.querySelector('.carousel-list a:last-child')
 
     init()
 
     // --- left button (prev)
     prev.addEventListener('click', () => {
-
+        console.log('prev')
         if (last.classList.contains('active')) {
+            console.log('LAST', last)
             return
         }
 
@@ -80,6 +81,7 @@
 
     // --- right button (next)
     next.addEventListener('click', () => {
+        console.log('next click')
         if (first.classList.contains('active')) {
             return
         }
@@ -122,7 +124,7 @@
                 item.classList.add('active')
             }
 
-            item.style.width = (carousel.offsetWidth - padding * (device.imgCount - 1)) / device.imgCount + 'px'
+            item.style.minWidth = (carousel.offsetWidth - padding * (device.imgCount - 1)) / device.imgCount + 'px'
         })
         step = imgItem ? imgItem.offsetWidth : null
         fullStep = step + padding
@@ -130,12 +132,13 @@
 
     // start point on touch
     var touchStartPoint = 0
+    var direction = 'RIGHT'
 
     // toche desktop
     carousel.onmousedown = (e) => {
         carousel.classList.remove('transition')
         touchStartPoint = e.pageX
-        console.log('mouse down', e.pageX)
+
         document.onmousemove = function(e) {
             let deltaX = 0
             if (touchStartPoint <= e.pageX) {
@@ -170,9 +173,12 @@
             }
         }
     }
+    // -----
 
 
-    // mobile touche
+    // --- mobile touche
+    var deltaX = 0
+
     carousel.ontouchstart = (e) => {
         carousel.classList.remove('transition')
         var touchLocation = e.targetTouches[0]
@@ -181,16 +187,21 @@
    
     carousel.ontouchmove = (e) => {
         var touchLocation = e.targetTouches[0]
-        var deltaX = 0
+
         if (touchStartPoint <= touchLocation.clientX) {
+            direction = 'RIGHT'
+            deltaX = touchLocation.clientX - touchStartPoint
             if (first.classList.contains('active')) {
                 deltaX = (touchLocation.clientX - touchStartPoint) < 50 ? (touchLocation.clientX - touchStartPoint) : 50
-            } else {
-                console.log('else')
-                deltaX = touchLocation.clientX - touchStartPoint
-            }
+            } 
+            // else {
+            //     deltaX = touchLocation.clientX - touchStartPoint
+            // }
             carousel.style.transform = 'translate(' + (current + deltaX) + 'px, 0px)'
         } else {
+            console.log('left')
+            direction = 'LEFT'
+
             deltaX = touchStartPoint - touchLocation.clientX
             carousel.style.transform = 'translate(' + (current - deltaX) + 'px, 0px)'
         }
@@ -198,13 +209,44 @@
 
     carousel.ontouchend = (e) => {
         carousel.classList.add('transition')
-        if (first.classList.contains('active')) {
+        console.log('DIRECTION', direction)
+
+        if (first.classList.contains('active') && direction === 'RIGHT') {
             carousel.style.transform = 'translate3d(' + (0) + 'px, 0px, 0px)'
             return
         }
+
+        if (direction === 'RIGHT') {
+            currentSlide -= 1
+
+            var index = device.imgCount
+            imgItemList.forEach((item, i) => {
+                item.classList.remove('active')
+    
+                if (i >= currentSlide && index) {
+                    item.classList.add('active')
+                    index--
+                }
+            })
+        }
+
+        if (direction === 'LEFT') {
+            currentSlide += 1
+
+            var index = device.imgCount
+            imgItemList.forEach((item, i) => {
+                console.log('for', item)
+                item.classList.remove('active')
+                if (i >= currentSlide && index) {
+                    item.classList.add('active')
+                    index--
+                }
+            })
+        }
         var touchLocation = e.targetTouches[0]
-        
-        carousel.style.transform = 'translate3d(' + (current += fullStep) + 'px, 0px, 0px)'
+        var indent = direction === 'RIGHT' ? (current += fullStep) : (current -= fullStep)
+        carousel.style.transform = 'translate3d(' + (indent) + 'px, 0px, 0px)'
+        // carousel.style.transform = 'translate3d(' + (current -= fullStep) + 'px, 0px, 0px)'
 
     }
 
