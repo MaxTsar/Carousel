@@ -70,9 +70,9 @@ img {
 .arrow {
     position: absolute;
     top: 50%;
-    width: 20px;
-    height: 20px;
-    background: red;
+    width: 30px;
+    height: 30px;
+    /* background: red; */
     cursor: pointer;
     z-index: 100;
 }
@@ -112,8 +112,6 @@ body {
     cursor: -moz-grab;
     cursor: -webkit-grab;
 }
-
-
 
 
 
